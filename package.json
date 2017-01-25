@@ -1,0 +1,19 @@
+{
+  "name": "ndx-database-backup",
+  "version": "0.0.1",
+  "description": "regular database backups for ndx-framework",
+  "main": "build/app.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ndxbxrme/ndx-database-backup.git"
+  },
+  "author": "ndxbxrme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ndxbxrme/ndx-database-backup/issues"
+  },
+  "homepage": "https://github.com/ndxbxrme/ndx-database-backup"
+}
