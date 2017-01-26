@@ -1,10 +1,10 @@
 {
   "name": "ndx-database-backup",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "regular database backups for ndx-framework",
   "main": "build/app.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "node build/test/test.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/ndxbxrme/ndx-database-backup/issues"
   },
-  "homepage": "https://github.com/ndxbxrme/ndx-database-backup"
+  "homepage": "https://github.com/ndxbxrme/ndx-database-backup",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2"
+  },
+  "dependencies": {
+    "glob": "^7.1.1"
+  }
 }
