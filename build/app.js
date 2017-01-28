@@ -11,7 +11,7 @@
   module.exports = function(ndx) {
     var backupDir, backupInterval, doBackup;
     backupDir = process.env.BACKUP_DIR || ndx.settings.BACKUP_DIR;
-    backupInterval = process.env.BACKUP_INTERVAL || ndx.settings.BACKUP_INTERVAL || '0';
+    backupInterval = process.env.BACKUP_INTERVAL || ndx.settings.BACKUP_INTERVAL || '120';
     if (backupDir) {
       doBackup = function(cb) {
         var d, db, exists, uri;

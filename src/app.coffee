@@ -6,7 +6,7 @@ glob = require 'glob'
 
 module.exports = (ndx) ->
   backupDir = process.env.BACKUP_DIR or ndx.settings.BACKUP_DIR
-  backupInterval = process.env.BACKUP_INTERVAL or ndx.settings.BACKUP_INTERVAL or '0'
+  backupInterval = process.env.BACKUP_INTERVAL or ndx.settings.BACKUP_INTERVAL or '120'
   if backupDir
     doBackup = (cb) ->
       exists = fs.existsSync backupDir
