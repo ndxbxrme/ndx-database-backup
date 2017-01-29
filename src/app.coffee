@@ -18,14 +18,14 @@ module.exports = (ndx) ->
       fs.writeFile uri, JSON.stringify(db), (e) ->
         cb? e, null
     setInterval doBackup, +backupInterval * 60 * 1000
-  ndx.app.get '/api/backup/list', ndx.authenticate('admin'), (req, res) ->
+  ndx.app.get '/api/backup/list', ndx.authenticate('superadmin'), (req, res) ->
     glob path.join(backupDir, 'BACKUP_*.json'), (e, r) ->
       if not e
         res.json r
       else
         res.json
           error: 'glob error'
-  ndx.app.post '/api/backup/restore', ndx.authenticate('admin'), (req, res) ->
+  ndx.app.post '/api/backup/restore', ndx.authenticate('superadmin'), (req, res) ->
     if req.body.fileName
       if fs.existsSync req.body.fileName
         text = fs.readFileSync req.body.fileName, 'utf8'

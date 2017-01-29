@@ -28,7 +28,7 @@
       };
       setInterval(doBackup, +backupInterval * 60 * 1000);
     }
-    ndx.app.get('/api/backup/list', ndx.authenticate('admin'), function(req, res) {
+    ndx.app.get('/api/backup/list', ndx.authenticate('superadmin'), function(req, res) {
       return glob(path.join(backupDir, 'BACKUP_*.json'), function(e, r) {
         if (!e) {
           return res.json(r);
@@ -39,7 +39,7 @@
         }
       });
     });
-    return ndx.app.post('/api/backup/restore', ndx.authenticate('admin'), function(req, res) {
+    return ndx.app.post('/api/backup/restore', ndx.authenticate('superadmin'), function(req, res) {
       var text;
       if (req.body.fileName) {
         if (fs.existsSync(req.body.fileName)) {
