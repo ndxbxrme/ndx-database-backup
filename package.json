@@ -1,6 +1,6 @@
 {
   "name": "ndx-database-backup",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "regular database backups for ndx-framework",
   "main": "build/app.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/ndxbxrme/ndx-database-backup.git"
   },
   "author": "ndxbxrme",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ndxbxrme/ndx-database-backup/issues"
   },
