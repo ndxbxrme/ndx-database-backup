@@ -33,9 +33,7 @@
         if (!e) {
           return res.json(r);
         } else {
-          return res.json({
-            error: 'glob error'
-          });
+          throw 'glob error';
         }
       });
     });
@@ -47,14 +45,10 @@
           ndx.database.restoreFromBackup(text);
           return res.end('OK');
         } else {
-          return res.json({
-            error: 'can\'t find file'
-          });
+          throw 'can\'t find file';
         }
       } else {
-        return res.json({
-          error: 'no filename'
-        });
+        throw 'no filename';
       }
     });
   };

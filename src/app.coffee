@@ -23,8 +23,7 @@ module.exports = (ndx) ->
       if not e
         res.json r
       else
-        res.json
-          error: 'glob error'
+        throw 'glob error'
   ndx.app.post '/api/backup/restore', ndx.authenticate('superadmin'), (req, res) ->
     if req.body.fileName
       if fs.existsSync req.body.fileName
@@ -32,10 +31,8 @@ module.exports = (ndx) ->
         ndx.database.restoreFromBackup text
         res.end 'OK'
       else
-        res.json
-          error: 'can\'t find file'
+        throw 'can\'t find file'
     else
-      res.json
-        error: 'no filename'
+      throw 'no filename'
       
       
