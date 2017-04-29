@@ -12,11 +12,8 @@ module.exports = (ndx) ->
       exists = fs.existsSync backupDir
       if not exists
         fs.mkdirSync backupDir
-      db = ndx.database.getDb()
-      d = new Date()
-      uri = path.join backupDir, 'BACKUP_' + d.valueOf() + '.json'
-      fs.writeFile uri, JSON.stringify(db), (e) ->
-        cb? e, null
+      writeStream = fs.createWriteStream path.join backupDir, "BACKUP_#{new Date().valueOf()}.json"
+      ndx.database.saveDatabase cb, writeStream
     setInterval doBackup, +backupInterval * 60 * 1000
   ndx.app.get '/api/backup/list', ndx.authenticate('superadmin'), (req, res) ->
     glob path.join(backupDir, 'BACKUP_*.json'), (e, r) ->
@@ -27,8 +24,8 @@ module.exports = (ndx) ->
   ndx.app.post '/api/backup/restore', ndx.authenticate('superadmin'), (req, res) ->
     if req.body.fileName
       if fs.existsSync req.body.fileName
-        text = fs.readFileSync req.body.fileName, 'utf8'
-        ndx.database.restoreFromBackup text
+        readStream = fs.createReadStream req.body.fileName
+        ndx.database.restoreFromBackup readStream
         res.end 'OK'
       else
         throw 'can\'t find file'

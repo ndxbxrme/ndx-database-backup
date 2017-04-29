@@ -14,17 +14,13 @@
     backupInterval = process.env.BACKUP_INTERVAL || ndx.settings.BACKUP_INTERVAL || '120';
     if (backupDir) {
       doBackup = function(cb) {
-        var d, db, exists, uri;
+        var exists, writeStream;
         exists = fs.existsSync(backupDir);
         if (!exists) {
           fs.mkdirSync(backupDir);
         }
-        db = ndx.database.getDb();
-        d = new Date();
-        uri = path.join(backupDir, 'BACKUP_' + d.valueOf() + '.json');
-        return fs.writeFile(uri, JSON.stringify(db), function(e) {
-          return typeof cb === "function" ? cb(e, null) : void 0;
-        });
+        writeStream = fs.createWriteStream(path.join(backupDir, "BACKUP_" + (new Date().valueOf()) + ".json"));
+        return ndx.database.saveDatabase(cb, writeStream);
       };
       setInterval(doBackup, +backupInterval * 60 * 1000);
     }
@@ -38,11 +34,11 @@
       });
     });
     return ndx.app.post('/api/backup/restore', ndx.authenticate('superadmin'), function(req, res) {
-      var text;
+      var readStream;
       if (req.body.fileName) {
         if (fs.existsSync(req.body.fileName)) {
-          text = fs.readFileSync(req.body.fileName, 'utf8');
-          ndx.database.restoreFromBackup(text);
+          readStream = fs.createReadStream(req.body.fileName);
+          ndx.database.restoreFromBackup(readStream);
           return res.end('OK');
         } else {
           throw 'can\'t find file';
