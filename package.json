@@ -1,6 +1,6 @@
 {
   "name": "ndx-database-backup",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "regular database backups for ndx-framework",
   "main": "build/app.js",
   "scripts": {

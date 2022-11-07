@@ -23,7 +23,7 @@
           Bucket: AWS.config.bucket,
           Prefix: ''
         };
-        s3.listObjects(m, (e, r) => {
+        s3.listObjects(m, async (e, r) => {
           if(!e) {
             const fileNames = r.Contents.map(item => item.Key);
             const now = new Date().valueOf();
