@@ -1,6 +1,6 @@
 {
   "name": "ndx-database-backup",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "regular database backups for ndx-framework",
   "main": "build/app.js",
   "scripts": {
@@ -25,7 +25,9 @@
     "load-grunt-tasks": "^3.5.2"
   },
   "dependencies": {
-    "glob": "^7.1.1"
+    "aws-sdk": "^2.1248.0",
+    "glob": "^7.1.1",
+    "s3-upload-stream": "^1.0.7"
   },
   "peerDependencies": {
     "ndxdb": ">=1.7.0"
