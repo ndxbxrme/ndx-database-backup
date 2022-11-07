@@ -12,7 +12,7 @@
 
   module.exports = function(ndx) {
     if(process.env.BACKUP_AWS_ID) {
-      AWS.config.bucket = process.env.BACKUP_AWS_BUCKET || settings.BACKUP_AWS_BUCKET;
+      process.env.BACKUP_AWS_BUCKET = process.env.BACKUP_AWS_BUCKET || settings.BACKUP_AWS_BUCKET;
       AWS.config.region = process.env.BACKUP_AWS_REGION || settings.BACKUP_AWS_REGION;
       AWS.config.accessKeyId = process.env.BACKUP_AWS_ID || settings.BACKUP_AWS_ID;
       AWS.config.secretAccessKey = process.env.BACKUP_AWS_KEY || settings.BACKUP_AWS_KEY;
@@ -20,7 +20,7 @@
       const s3Stream = require('s3-upload-stream')(S3);
       const doBackup = async () => {
         const m = {
-          Bucket: AWS.config.bucket,
+          Bucket: process.env.BACKUP_AWS_BUCKET,
           Prefix: ''
         };
         s3.listObjects(m, async (e, r) => {
@@ -49,7 +49,7 @@
             const toDelete = fileNames.filter(fileName => !toSave.includes(fileName));
             for(let f=0; f<toDelete.length; f++) {
               const delParams = {
-                Bucket: AWS.config.bucket,
+                Bucket: process.env.BACKUP_AWS_BUCKET,
                 Key: toDelete[f]
               }
               await s3.deleteObject(params).promise();
@@ -58,7 +58,7 @@
         });
         const backupName = 'BACKUP_' + (new Date().valueOf()) + '.json';
         const writeStream = s3Stream.upload({
-          Bucket: AWS.config.bucket,
+          Bucket: process.env.BACKUP_AWS_BUCKET,
           Key: backupName
         });
         ndx.database.saveDatabase(() => {}, writeStream);
@@ -66,7 +66,7 @@
       setInterval(doBackup, 60 * 60 * 1000);
       ndx.app.get('/api/backup/list', ndx.authenticate('superadmin'), function(req, res) {
         const m = {
-          Bucket: AWS.config.bucket,
+          Bucket: process.env.BACKUP_AWS_BUCKET,
           Prefix: ''
         };
         s3.listObjects(m, (e, r) => {
@@ -81,7 +81,7 @@
         var readStream;
         if (req.body.fileName) {
           readStream = S3.getObject({
-            Bucket: Aws.config.bucket,
+            Bucket: process.env.BACKUP_AWS_BUCKET,
             Key: req.body.fileName
           }).createReadStream();
           ndx.database.restoreFromBackup(readStream);
