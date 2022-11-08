@@ -17,16 +17,20 @@
       AWS.config.accessKeyId = process.env.BACKUP_AWS_ID || settings.BACKUP_AWS_ID;
       AWS.config.secretAccessKey = process.env.BACKUP_AWS_KEY || settings.BACKUP_AWS_KEY;
       const S3 = new AWS.S3();
-      const s3Stream = require('s3-upload-stream')(S3);
+      const S3Stream = require('s3-upload-stream')(S3);
       const doBackup = async () => {
+		console.log('starting backup');
         const m = {
           Bucket: process.env.BACKUP_AWS_BUCKET,
           Prefix: ''
         };
-        s3.listObjects(m, async (e, r) => {
+        S3.listObjects(m, async (e, r) => {
+		  console.log('list objects');
+		  console.log(e);
           if(!e) {
             const fileNames = r.Contents.map(item => item.Key);
             const now = new Date().valueOf();
+			const outFiles = {};
             fileNames.sort((a, b) => a < b ? 1 : -1);
             fileNames.forEach(fileName => {
               const fileDate = +/\d+/.exec(fileName)[0];
@@ -52,24 +56,26 @@
                 Bucket: process.env.BACKUP_AWS_BUCKET,
                 Key: toDelete[f]
               }
-              await s3.deleteObject(params).promise();
+              await S3.deleteObject(params).promise();
             }
           }            
         });
+		console.log('writing backup');
         const backupName = 'BACKUP_' + (new Date().valueOf()) + '.json';
-        const writeStream = s3Stream.upload({
+        const writeStream = S3Stream.upload({
           Bucket: process.env.BACKUP_AWS_BUCKET,
           Key: backupName
         });
         ndx.database.saveDatabase(() => {}, writeStream);
+		console.log('backup done');
       }
-      setInterval(doBackup, 60 * 60 * 1000);
+      setInterval(doBackup, 5 * 60 * 1000);
       ndx.app.get('/api/backup/list', ndx.authenticate('superadmin'), function(req, res) {
         const m = {
           Bucket: process.env.BACKUP_AWS_BUCKET,
           Prefix: ''
         };
-        s3.listObjects(m, (e, r) => {
+        S3.listObjects(m, (e, r) => {
           if (!e) {
             return res.json(r.Contents.map(item => item.Key));
           } else {
