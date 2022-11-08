@@ -69,7 +69,7 @@
         ndx.database.saveDatabase(() => {}, writeStream);
 		console.log('backup done');
       }
-      setInterval(doBackup, 5 * 60 * 1000);
+      setInterval(doBackup, 60 * 60 * 1000);
       ndx.app.get('/api/backup/list', ndx.authenticate('superadmin'), function(req, res) {
         const m = {
           Bucket: process.env.BACKUP_AWS_BUCKET,
